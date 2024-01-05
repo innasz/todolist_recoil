@@ -1,30 +1,53 @@
 import { DeleteOutlined } from "@ant-design/icons";
-import { List, Typography } from "antd";
-import React from "react";
+import { Button, Input, List, Space, Typography } from "antd";
+import React, { useRef, useState } from "react";
+import { v4 as uuidv4 } from "uuid";
 
-// 투두리스트를 보여주는 곳
-const TodoList = ({ todo, setTodo }) => {
-  // 삭제 기능
-  function onDeleteHandler() {
-    // return console.log("todoTitle", todoTitle);
+const TodoList = () => {
+  const [todo, setTodo] = useState([]);
+  const [title, setTitle] = useState("");
+  const inputRef = useRef(null);
+
+  function onAddHandler(e) {
+    const newTodo = { id: uuidv4(), title: title, checked: false };
+    setTodo([...todo, newTodo]);
+    setTitle("");
+    e.preventDefault();
+    inputRef.current.focus();
   }
 
-  // 토글 추가
+  const onDeleteHandler = (deleted) =>
+    setTodo(todo.filter((item) => item.id !== deleted.id));
 
   return (
-    <List
-      bordered
-      dataSource={todo?.map((todo) => todo.title)}
-      renderItem={(item) => (
-        <List.Item>
-          <Typography.Text>{item}</Typography.Text>
+    <div>
+      <div className="mb-8">
+        <form>
+          <Space.Compact style={{ width: "100%" }}>
+            <Input
+              ref={inputRef}
+              value={title}
+              type="text"
+              placeholder="Hey, input here :)"
+              onChange={(e) => setTitle(e.target.value)}
+            />
+            <Button type="default" onClick={onAddHandler}>
+              Add
+            </Button>
+          </Space.Compact>
+        </form>
+      </div>
+      {todo?.map((item) => (
+        <div className="flex">
+          <input type="checkbox" />
+          <li className="list-none">{item.title}</li>
           <DeleteOutlined
             className="cursor-pointer"
-            onClick={onDeleteHandler}
+            onClick={() => onDeleteHandler(item)}
           />
-        </List.Item>
-      )}
-    />
+        </div>
+      ))}
+    </div>
   );
 };
 

@@ -1,24 +1,27 @@
+import { DeleteOutlined } from "@ant-design/icons";
 import { List, Typography } from "antd";
 import React from "react";
 
 // 투두리스트를 보여주는 곳
-const TodoList = () => {
-  const todoMockup = [
-    { id: 1, title: "todolist add 기능", checked: true },
-    { id: 2, title: "todolist delete 기능", checked: false },
-    { id: 3, title: "todolist check 기능", checked: true },
-    { id: 3, title: "todolist modify 기능", checked: true },
-  ];
+const TodoList = ({ todo, setTodo }) => {
+  // 삭제 기능
+  function onDeleteHandler() {
+    // return console.log("todoTitle", todoTitle);
+  }
 
-  const todoTitle = todoMockup.map((obj) => obj.title);
+  // 토글 추가
 
   return (
     <List
       bordered
-      dataSource={todoTitle}
+      dataSource={todo?.map((todo) => todo.title)}
       renderItem={(item) => (
         <List.Item>
           <Typography.Text>{item}</Typography.Text>
+          <DeleteOutlined
+            className="cursor-pointer"
+            onClick={onDeleteHandler}
+          />
         </List.Item>
       )}
     />

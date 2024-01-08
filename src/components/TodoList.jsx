@@ -1,5 +1,5 @@
 import { DeleteOutlined } from "@ant-design/icons";
-import { Button, Input, List, Space, Typography } from "antd";
+import { Button, Input, Space } from "antd";
 import React, { useRef, useState } from "react";
 import { v4 as uuidv4 } from "uuid";
 
@@ -16,8 +16,18 @@ const TodoList = () => {
     inputRef.current.focus();
   }
 
-  const onDeleteHandler = (deleted) =>
+  function onDeleteHandler(deleted) {
     setTodo(todo.filter((item) => item.id !== deleted.id));
+  }
+
+  function onToggleHandler(checked) {
+    setTodo((prev) => {
+      return prev.map((todo) => ({
+        ...todo,
+        checked: todo.id === checked.id ? !checked.checked : todo.checked,
+      }));
+    });
+  }
 
   return (
     <div>
@@ -38,8 +48,8 @@ const TodoList = () => {
         </form>
       </div>
       {todo?.map((item) => (
-        <div className="flex">
-          <input type="checkbox" />
+        <div className="flex" key={item.id}>
+          <input type="checkbox" onChange={() => onToggleHandler(item)} />
           <li className="list-none">{item.title}</li>
           <DeleteOutlined
             className="cursor-pointer"
